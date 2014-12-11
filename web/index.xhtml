@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./layout.xhtml">
+
+
+
+            <ui:define name="content">
+                <h:form id="frmbusqueda">
+                    <p:panel header="Comprobacion de busqueda">
+                        
+                        <h:panelGrid columns="3" cellpadding="3">
+                            <h:outputLabel value="Numero de Tarjeta"/>
+                            <p:inputText/>
+                            <p:commandButton value="Busqueda"   onclick="PF('dlgbusqueda').show();" update=":frmdatos"/>
+                        </h:panelGrid>
+                        <p:separator/>
+                        
+                        <h:panelGrid columns="2" cellpadding="2">
+                        <h:outputLabel value="Nombre:"/>
+                        <p:inputText value="#{per.personal.nombre}"/>
+                        <h:outputLabel value="Apellido Paterno:"/>
+                        <p:inputText value="#{per.personal.apellidoPaterno}"/>
+                        <h:outputLabel value="Apellido Materno:"/>
+                        <p:inputText value="#{per.personal.apellidoMaterno}"/>
+                        <h:outputLabel value="Direccion:"/>
+                        <p:inputText value="#{per.personal.direccion}"/>
+                        <h:outputLabel value="Sexo:"/>
+                        <p:inputText value="#{per.personal.sexo}"/>
+                        <h:outputLabel value="Codigo Postal:"/>
+                        <p:inputText value="#{per.personal.codigoPostal}"/>
+                        <p:commandButton actionListener="#{per.insertar()}" update=":frmdatos" value="Agregar"/>
+                        </h:panelGrid>
+                        
+                         </p:panel>
+                </h:form>
+               
+                <h:form id="frmdatos">
+                        <p:dataTable  var="perf" value="#{per.personales}" >
+       				<p:column headerText="Id">
+                                    <h:outputText value="#{perf.id}" />
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{perf.nombre}" />
+                                </p:column>
+                                <p:column headerText="ApellidoPaterno">
+                                    <h:outputText value="#{perf.apellidoPaterno}" />
+                                </p:column>
+                                <p:column headerText="ApellidoMaterno">
+                                    <h:outputText value="#{perf.apellidoMaterno}" />
+                                </p:column>
+                            <p:column>
+                                <p:commandButton value="Editar" onclick="PF('dlgmofificar').show();" update=":formModificar">
+                                    <f:setPropertyActionListener target="#{per.personal}" value="#{perf}"/>
+                                </p:commandButton>
+                                <p:commandButton value="Eliminar" onclick="PF('dlgeliminar').show();">
+                                    <f:setPropertyActionListener target="#{per.personal}" value="#{perf}"/>
+                                </p:commandButton>
+                            </p:column>
+                                
+                                </p:dataTable>
+                    
+                 
+                               
+                                </h:form>
+               
+                   <p:dialog id="dlg" header="Modificar Personal" showEffect="explode" hideEffect="explode"
+                              widgetVar="dlgmofificar" modal="true" resizable="false" minWidth="200">
+                        
+                        <h:form id="formModificar">
+                            <h:panelGrid columns="2">
+                                
+                                   <h:outputLabel value="Nombre:"/>
+                        <p:inputText value="#{per.personal.nombre}"/>
+                        <h:outputLabel value="Apellido Paterno:"/>
+                        <p:inputText value="#{per.personal.apellidoPaterno}"/>
+                        <h:outputLabel value="Apellido Materno:"/>
+                        <p:inputText value="#{per.personal.apellidoMaterno}"/>
+                        <h:outputLabel value="Direccion:"/>
+                        <p:inputText value="#{per.personal.direccion}"/>
+                        <h:outputLabel value="Sexo:"/>
+                        <p:inputText value="#{per.personal.sexo}"/>
+                        <h:outputLabel value="Codigo Postal:"/>
+                        <p:inputText value="#{per.personal.codigoPostal}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Modificar" update=":frmdatos"
+                                             actionListener="#{per.modificar()}" onclick="PF('dlgmodificar').hide();"  />
+                            
+                        </h:form>
+                        
+                    </p:dialog>
+                
+                
+                <p:dialog id="dlg2" header="Eliminar Personal"  showEffect="explode"
+                          hideEffect="explode" widgetVar="dlgeliminar" modal="true"
+                          resizable="false" minWidth="200">
+                    
+                    <h:form id="formeliminar">
+                        <h:outputLabel value=" Desea eliminar"/>
+                        <p:commandButton value="Si" actionListener="#{per.eliminar()}" update=":frmdatos"
+                                         onclick="PF('dlg2').hide();"  />
+                        
+                        <p:commandButton value="No"  onclick="PF('dlgeliminar').hide();" />
+                        
+                    </h:form>
+                    
+                </p:dialog>
+                
+                <!-- tipos de busqueda de tarjeta-->
+                <p:dialog id="dlgbusuqeda" header="Tipos de busqueda" showEffect="explode" hideEffect="explode"
+                              widgetVar="dlgbusqueda" modal="true" resizable="false" minWidth="200" minimizable="true" maximizable="true">
+                    
+                    <h:form id="frmbus">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="console" value="Busqueda:" />
+                                <p:selectOneRadio id="console">
+                                    <f:selectItem itemLabel="Cliente" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="IP" itemValue="PS+" />
+                                    <f:selectItem itemLabel="Data" itemValue="Wii U" />
+                                </p:selectOneRadio>
+                            <p:commandButton value="Buscar"/>
+                            <p:inputText/>
+                        </h:panelGrid>
+                        <p:separator/>
+                           <h:form id="frmtabla">
+                            
+                              <p:contextMenu for="cars">
+                               <p:menuitem value="View" update=":carDetail" icon="ui-icon-search" oncomplete="PF('carDialog').show()"/>     
+                           </p:contextMenu>
+                         <p:dataTable id="cars"  var="perf" value="#{per.personales}"   rowKey="#{perf.id}"
+                                            selection="#{per.personal}" selectionMode="single" >
+       				<p:column headerText="Id">
+                                    <h:outputText value="#{perf.id}" />
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{perf.nombre}" />
+                                </p:column>
+                                <p:column headerText="ApellidoPaterno">
+                                    <h:outputText value="#{perf.apellidoPaterno}" />
+                                </p:column>
+                                <p:column headerText="ApellidoMaterno">
+                                    <h:outputText value="#{perf.apellidoMaterno}" />
+                                </p:column>
+                            
+                                
+                                </p:dataTable>
+                            
+                        </h:form>
+                        
+
+                       
+                    </h:form>  
+                    
+                  
+                    
+                </p:dialog>   
+                
+                <!-- Fin busqueda de tarjeta-->
+                
+                <!--mostrar-->
+                <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" minWidth="200">
+        <p:outputPanel id="carDetail" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{not empty per.personal}" columnClasses="label,value">
+               <h:outputLabel value="Nombre:"/>
+                        <h:outputText value="#{per.personal.nombre}"/>
+                        <h:outputLabel value="Apellido Paterno:"/>
+                        <h:outputText value="#{per.personal.apellidoPaterno}"/>
+                        <h:outputLabel value="Apellido Materno:"/>
+                        <h:outputText value="#{per.personal.apellidoMaterno}"/>
+                        <h:outputLabel value="Direccion:"/>
+                        <h:outputText value="#{per.personal.direccion}"/>
+                        <h:outputLabel value="Sexo:"/>
+                        <h:outputText value="#{per.personal.sexo}"/>
+                        <h:outputLabel value="Codigo Postal:"/>
+                        <h:outputText value="#{per.personal.codigoPostal}"/>
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+                
+                <!--fin-->
+                
+                
+                
+                   
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
